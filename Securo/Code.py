@@ -414,33 +414,33 @@ st.markdown("""
 
 # CSV data handling
 
+@st.cache_data
 def load_csv_data():
-    """Load and cache CSV data with better error handling."""
     csv_filename = "criminal_justice_qa.csv"
-    
-    # Get the directory of the current Python script
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    
-    # Construct the full path to the CSV file
+    script_dir = os.path.dirname(__file__)
     csv_path = os.path.join(script_dir, csv_filename)
-
     try:
         if os.path.exists(csv_path):
             df = pd.read_csv(csv_path)
-            st.success(f"✅ Successfully loaded CSV from: {csv_path}")
-            st.info(f"📊 Loaded {len(df)} records with {len(df.columns)} columns")
+            st.success(f"successfully load {csv_path}")
+            st.info(f"loaded {len(df)} records with {len(df.columns)} columns")
             return df, csv_path
         else:
+            current_dir = os.getcwd()
+            files_in_script_dir = os.listdir(script_dir)
+            files_in_current_dir = os.listdir(current_dir)
             return None, f"""
-            ❌ Could not find '{csv_filename}'.
-            
-            📂 The script looked for the file at this location:
-            • {csv_path}
-            
-            💡 Make sure your CSV file is named exactly 'criminal_justice_qa.csv' and is in the same folder as this app script on GitHub.
+            could not find '{csv_filename}'.
+            expected {csv_path}
+            dir {script_dir}
+            files: {', '.join([f for f in files_in_script_dir if f.endswith('.csv')])}
+            current dir {current_dir}
+            files in current directory {', '.join([f for f in files_in_current_dir if f.endswith('.csv')])}
+            its not in the same folder chill
             """
     except Exception as e:
-        return None, f"❌ An error occurred while loading the CSV file: {e}"
+        return None, f" im not telling u what happened: {e}"
+
 
 # Example usage within a Streamlit app
 if __name__ == "__main__":
