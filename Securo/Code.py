@@ -413,43 +413,44 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # CSV data handling
-@st.cache_data
+
 def load_csv_data():
-    """Load and cache CSV data with better error handling"""
-    csv_filename = "criminal_justice_qa.csv"  # Your correct CSV filename
-   
-    # Check multiple possible locations
-    possible_paths = [
-        csv_filename,  # Current directory
-        f"./{csv_filename}",  # Explicit current directory
-        f"App/{csv_filename}",  # In App folder
-        f"../{csv_filename}",  # Parent directory
-        os.path.join(os.getcwd(), csv_filename),  # Full path
-    ]
-   
-    for path in possible_paths:
-        try:
-            if os.path.exists(path):
-                df = pd.read_csv(path)
-                st.success(f"✅ Successfully loaded CSV from: {path}")
-                st.info(f"📊 Loaded {len(df)} records with {len(df.columns)} columns")
-                return df, path
-        except Exception as e:
-            continue
-   
-    # If no file found, show detailed error
-    current_dir = os.getcwd()
-    files_in_dir = os.listdir(current_dir)
-   
-    return None, f"""
-    ❌ Could not find '{csv_filename}' in any of these locations:
-    {chr(10).join(['• ' + path for path in possible_paths])}
-   
-    📂 Current directory: {current_dir}
-    📁 Files found: {', '.join([f for f in files_in_dir if f.endswith('.csv')])}
-   
-    💡 Make sure your CSV file is named exactly 'criminal_justice_qa.csv' and is in the same folder as your app.
-    """
+    """Load and cache CSV data with better error handling."""
+    csv_filename = "criminal_justice_qa.csv"
+    
+    # Get the directory of the current Python script
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    
+    # Construct the full path to the CSV file
+    csv_path = os.path.join(script_dir, csv_filename)
+
+    try:
+        if os.path.exists(csv_path):
+            df = pd.read_csv(csv_path)
+            st.success(f"✅ Successfully loaded CSV from: {csv_path}")
+            st.info(f"📊 Loaded {len(df)} records with {len(df.columns)} columns")
+            return df, csv_path
+        else:
+            return None, f"""
+            ❌ Could not find '{csv_filename}'.
+            
+            📂 The script looked for the file at this location:
+            • {csv_path}
+            
+            💡 Make sure your CSV file is named exactly 'criminal_justice_qa.csv' and is in the same folder as this app script on GitHub.
+            """
+    except Exception as e:
+        return None, f"❌ An error occurred while loading the CSV file: {e}"
+
+# Example usage within a Streamlit app
+if __name__ == "__main__":
+    st.title("CSV Data Loader")
+    df, message = load_csv_data()
+    
+    if df is not None:
+        st.write(df.head())
+    else:
+        st.error(message)
 
 def search_csv_data(df, query):
     """Search through CSV data for relevant information"""
