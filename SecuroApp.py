@@ -4,8 +4,7 @@ import datetime
 import random
 import google.generativeai as genai
 
-# Gemini API Key configuration
-geminiapikey = "AIzaSyADtSVwmMhcK_99nP70Qb1c0MA9RKdZl60"
+geminiapikey = "api_key_here"
 genai.configure(api_key=geminiapikey)
 
 # Page configuration
