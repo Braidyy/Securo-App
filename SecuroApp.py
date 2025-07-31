@@ -551,7 +551,7 @@ if st.session_state.sidebar_state == "expanded":
         st.markdown("""
         <div class="map-container crime-map">
             <iframe
-                src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCkSjJBcI_wqA37bdF-08ROrMFaGYObyjA&q=Basseterre,St+Kitts+and+Nevis&maptype=satellite&zoom=12"
+                src="https://www.google.com/maps/embed/v1/place?key=AIzaSyADtSVwmMhcK_99nP70Qb1c0MA9RKdZl60=Basseterre,St+Kitts+and+Nevis&maptype=satellite&zoom=12"
                 allowfullscreen=""
                 loading="lazy"
                 referrerpolicy="no-referrer-when-downgrade">
