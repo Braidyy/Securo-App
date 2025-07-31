@@ -2,6 +2,11 @@ import streamlit as st
 import time
 import datetime
 import random
+import google.generativeai as genai
+
+# Gemini API Key configuration
+geminiapikey = "AIzaSyADtSVwmMhcK_99nP70Qb1c0MA9RKdZl60"
+genai.configure(api_key=geminiapikey)
 
 # Page configuration
 st.set_page_config(
