@@ -413,7 +413,6 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # CSV data handling
-
 @st.cache_data
 def load_csv_data():
     csv_filename = "criminal_justice_qa.csv"
@@ -442,16 +441,6 @@ def load_csv_data():
         return None, f" im not telling u what happened: {e}"
 
 
-# Example usage within a Streamlit app
-if __name__ == "__main__":
-    st.title("CSV Data Loader")
-    df, message = load_csv_data()
-    
-    if df is not None:
-        st.write(df.head())
-    else:
-        st.error(message)
-
 def search_csv_data(df, query):
     """Search through CSV data for relevant information"""
     if df is None:
@@ -475,7 +464,7 @@ def search_csv_data(df, query):
                 continue
    
     if results:
-        return f"🔍 **Search Results for '{query}':**\n\n" + "\n\n---\n\n".join(results[:3])
+        return (results)
     else:
         return f"🔍 No matches found for '{query}' in the crime database. Try different search terms or check spelling."
 
@@ -550,19 +539,19 @@ if not st.session_state.csv_loaded:
         csv_data, status_message = load_csv_data()
         st.session_state.csv_data = csv_data
         st.session_state.csv_loaded = True
-       
+        
         if csv_data is not None:
             st.markdown(f'<div class="file-status file-found">{status_message}</div>', unsafe_allow_html=True)
-           
+            
             # Add success message to chat
             st.session_state.messages.append({
-                "role": "assistant",
+                "role": "assistant", 
                 "content": f"✅ **Crime database loaded successfully!**\n\n📊 Database contains {len(csv_data)} records with {len(csv_data.columns)} data fields.\n\n🔍 You can now ask me questions about the crime data. Try asking about specific crimes, locations, dates, or any other information you need for your investigation.",
                 "timestamp": datetime.datetime.now().strftime("%H:%M:%S")
             })
         else:
             st.markdown(f'<div class="file-status file-missing">{status_message}</div>', unsafe_allow_html=True)
-           
+            
             # Add error message to chat
             st.session_state.messages.append({
                 "role": "assistant",
@@ -677,7 +666,7 @@ with col2:
             # Generate response based on CSV data
             with st.spinner("🔍 Analyzing crime database..."):
                 response = search_csv_data(st.session_state.csv_data, user_input)
-               
+                
             st.session_state.messages.append({
                 "role": "assistant",
                 "content": response,
